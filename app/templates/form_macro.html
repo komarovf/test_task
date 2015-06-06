@@ -1,0 +1,30 @@
+{% macro render_field(field, label=None, label_visible=true) -%}
+    <div class="form-group {% if field.errors %}has-error{% endif %} {{ kwargs.pop('class_', '') }}">
+        {% if field.type != 'HiddenField' and label_visible %}
+            {% if not label %}{% set label=field.label.text %}{% endif %}
+            <label for="{{ field.id }}" class="col-lg-2 control-label">{{ label|safe }}</label>
+        {% endif %}
+        <div class="col-lg-8">
+            {{ field(class_='form-control', **kwargs) }}
+        </div>
+        {% if field.errors %}
+            {% for e in field.errors %}
+                <p class="help-block">{{ e }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{%- endmacro %}
+ 
+{% macro render_checkbox_field(field, label=None) -%}
+    {% if not label %}{% set label=field.label.text %}{% endif %}
+    <div class="form-group">
+      <span class="col-lg-2"></span>
+      <div class="col-lg-8">
+        <div class="checkbox">
+          <label>
+            {{ field(type='checkbox', **kwargs) }} {{ label }}
+          </label>
+        </div>
+      </div>
+    </div>
+{%- endmacro %}

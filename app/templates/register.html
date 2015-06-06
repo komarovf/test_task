@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% from "form_macro.html" import render_field %}
+
+{% block content %}
+<div class="well">
+<form class="form-horizontal" action="" method="POST" name="register">
+  <fieldset>
+    <legend>Registration page</legend>
+
+    {{ form.hidden_tag() }}
+    {{ render_field(form.login, label='Login', placeholder='Login') }}
+    {{ render_field(form.email, label='Email', placeholder='Email') }}
+    {{ render_field(form.password, label='Password', placeholder='Password') }}
+    {{ render_field(form.confirm_pass, label='Confirm password', placeholder='Confirm password') }}
+
+    <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="reset" class="btn btn-default">Reset</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+</div>
+{% endblock content %}

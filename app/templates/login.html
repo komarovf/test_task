@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% from "form_macro.html" import render_field, render_checkbox_field %}
+
+{% block content %}
+<div class="well">
+<form class="form-horizontal" action="" method="POST" name="login">
+  <fieldset>
+    <legend>Login page</legend>
+
+    {{ form.hidden_tag() }}
+    {{ render_field(form.login, label='Login', placeholder='Login') }}
+    {{ render_field(form.password, label='Password', placeholder='Password') }}
+    {{ render_checkbox_field(form.remember_me, label='Remember me') }}
+
+    <div class="form-group">
+      <div class="col-lg-8 col-lg-offset-2">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+</div>
+{% endblock content %}
