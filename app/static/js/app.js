@@ -19,7 +19,7 @@ $('document').ready(function() {
                 } else {
                     str = 'Like (' + likes + ')';
                 }
-                element.html(str);
+                element.text(str);
             }).fail(function(xhr, textStatus, errorThrown) {
                 console.log('Something went wrong!');
             });

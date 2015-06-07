@@ -13,6 +13,7 @@
       </span>
     </div>
   </div>
+
   <h3>Answers:</h3>
   {% if answers.items|length > 0 %}
   <div class="list-group" id="answers">
@@ -40,6 +41,7 @@
   {% else %}
     <small>No answers yet!</small>
   {% endif %}
+
   <ul class="pager">
     {% if answers.has_prev %}
       <li class="previous"><a href="{{ url_for('answers', question_id=question.id, page=answers.prev_num) }}">← Previous</a></li>
@@ -52,6 +54,7 @@
       <li class="next disabled"><a href="#">Next →</a></li>
     {% endif %}
   </ul>
+  
   {% if form %}
   <div class="well">
     <form class="form-horizontal" action="" method="POST" name="answer">

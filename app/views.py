@@ -27,7 +27,7 @@ def not_found_error(error):
 @app.route('/')
 @app.route('/<int:page>')
 def index(page=1):
-    questions = Question.query.paginate(page, RECORDS_PER_PAGE, True)
+    questions = Question.query.order_by(Question.date.desc()).paginate(page, RECORDS_PER_PAGE, True)
     return render_template('index.html', questions=questions)
 
 
@@ -86,7 +86,7 @@ def answers(question_id=None, page=1):
     if question_id is None:
         abort(404)
     question = Question.query.get_or_404(question_id)
-    answers = question.answers.paginate(page, RECORDS_PER_PAGE, True)
+    answers = question.answers.order_by(Answer.date.desc()).paginate(page, RECORDS_PER_PAGE, True)
     form = None
 
     # Posting answers only for authenticated users
