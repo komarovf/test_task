@@ -67,5 +67,11 @@
     </fieldset>
     </form>
   </div>
+  {% else %}
+  <small>
+    Only authenticated users can answer questions! | 
+    <a href="{{ url_for('login') }}">Login</a> or 
+    <a href="{{ url_for('register') }}">Register</a>
+  </small>
   {% endif %}
 {% endblock content %}
