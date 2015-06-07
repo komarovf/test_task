@@ -73,6 +73,19 @@ class Answer(db.Model):
     date = db.Column(db.DateTime())
     question_id = db.Column(db.Integer(), db.ForeignKey('question.id'))
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    likes = db.relationship('User', secondary=likes, backref=db.backref('liked', lazy='dynamic'), 
+                            lazy='dynamic')
+
+    def like(self, user):
+        # Like & dislike functionality
+        if not self.is_liking(user):
+            self.likes.append(user)
+        else:
+            self.likes.remove(user)
+        return self
+
+    def is_liking(self, user):
+        return self.likes.filter(likes.c.user_id == user.id).count() > 0
 
     def __repr__(self):
         return str(self.body)

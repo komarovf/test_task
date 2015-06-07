@@ -6,9 +6,13 @@
     {% for q in questions.items %}
     <ul class="list-group">
       <h5>
-        {% set len = q.answers.items|length %}
+        {% set len = q.answers.all()|length %}
         <a href="{{ url_for('answers', question_id=q.id) }}" class="list-group-item">
-          {% if len %}<span class="badge">{{ len }}</span>{% endif %} 
+          {% if len %}
+            <span class="badge" data-toggle="tooltip" title="This question has answers!">
+              {{ len }}
+            </span>
+          {% endif %} 
           {{ q.title }}
         </a> 
         <span class="help-block" style="padding-left:16px;">

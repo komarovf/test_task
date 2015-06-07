@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, flash, g, session, request
+from flask import render_template, redirect, url_for, flash, g, session, request, abort, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db, lm
@@ -87,6 +87,7 @@ def answers(question_id=None, page=1):
         abort(404)
     question = Question.query.get_or_404(question_id)
     answers = question.answers.paginate(page, RECORDS_PER_PAGE, True)
+    form = None
 
     # Posting answers only for authenticated users
     if g.user.is_authenticated():
@@ -97,8 +98,16 @@ def answers(question_id=None, page=1):
             db.session.commit()
             flash('Got it!')
             return redirect(url_for('answers', question_id=question_id, page=page))
-    else:
-        abort(404)
     return render_template('answers.html', question=question, answers=answers, form=form)
 
 
+@app.route('/like', methods=['POST'])
+@login_required
+def like():
+    answer_id = request.form['answer_id']
+    answer = Answer.query.get(answer_id)
+    if answer:
+        answer.like(g.user)
+        db.session.add(answer)
+        db.session.commit()
+        return jsonify(likes=len(answer.likes.all())), 200
