@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class= 'well'>
+    <h3>List of questions:</h3><br>
+    {% for q in questions %}
+    <ul class="list-group">
+      <h5>
+        <a href="#" class="list-group-item"><span class="badge">12</span> {{ q.title }}</a> 
+        <span class="help-block" style="padding-left:16px;">helper</span>
+      </h5>
+    </ul>
+    {% endfor %}
+    <div class='text-center'>
+        <ul class="pagination">
+          <li class="disabled"><a href="#">«</a></li>
+          <li class="active"><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">»</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock content %}

@@ -6,12 +6,13 @@
         {% endif %}
         <div class="col-lg-8">
             {{ field(class_='form-control', **kwargs) }}
+            {% if field.errors %}
+                {% for e in field.errors %}
+                    <span class="help-block">{{ e }}</span>
+                {% endfor %}
+            {% endif %}
         </div>
-        {% if field.errors %}
-            {% for e in field.errors %}
-                <p class="help-block">{{ e }}</p>
-            {% endfor %}
-        {% endif %}
+
     </div>
 {%- endmacro %}
  

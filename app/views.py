@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from flask import render_template, redirect, url_for, flash, g, session, request
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db, lm
-from .forms import RegisterForm, LoginForm
-from .models import User
+from .forms import RegisterForm, LoginForm, AskForm
+from .models import User, Question
+from config import RECORDS_PER_PAGE
 
 
 @lm.user_loader
@@ -22,8 +25,10 @@ def not_found_error(error):
 
 
 @app.route('/')
-def index():
-    return render_template('base.html')
+@app.route('/<int:page>')
+def index(page=1):
+    questions = Question.query.paginate(1, page*RECORDS_PER_PAGE, False).items
+    return render_template('index.html', questions=questions)
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -63,5 +68,13 @@ def logout():
 
 
 @app.route('/ask', methods=['GET', 'POST'])
+@login_required
 def ask():
-    return 'lol'
+    form = AskForm()
+    if form.validate_on_submit():
+        question = Question(title=form.title.data, body=form.body.data, date=datetime.utcnow(), author=g.user)
+        db.session.add(question)
+        db.session.commit()
+        flash('Your question successfully added!')
+        return redirect(url_for('index'))
+    return render_template('ask_question.html', form=form, title='Ask your question')

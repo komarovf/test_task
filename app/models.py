@@ -13,13 +13,25 @@ likes = db.Table(
 )
 
 
+class Question(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String(50))
+    body = db.Column(db.String(300))
+    date = db.Column(db.DateTime())
+    answers = db.relationship('Answer', backref='question', lazy='dynamic')
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+
+    def __repr__(self):
+        return str(self.title)
+
+
 class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     login = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120))
     _password = db.Column(db.String(64))
-    answers = db.relationship('Answer', backref='user', lazy='dynamic')
-    questions = db.relationship('Question', backref='user', lazy='dynamic')
+    answers = db.relationship('Answer', backref='author', lazy='dynamic')
+    questions = db.relationship('Question', backref='author', lazy='dynamic')
 
     @staticmethod
     def make_valid_login(login):
@@ -55,20 +67,9 @@ class User(db.Model):
         return str(self.login)
 
 
-class Question(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    body = db.Column(db.String(120))
-    date = db.Column(db.DateTime())
-    answers = db.relationship('Answer', backref='question', lazy='dynamic')
-    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return str(self.body)
-
-
 class Answer(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    body = db.Column(db.String(120))
+    body = db.Column(db.String(300))
     date = db.Column(db.DateTime())
     question_id = db.Column(db.Integer(), db.ForeignKey('question.id'))
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
