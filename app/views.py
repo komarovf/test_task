@@ -27,7 +27,7 @@ def not_found_error(error):
 @app.route('/')
 @app.route('/<int:page>')
 def index(page=1):
-    questions = Question.query.paginate(1, page*RECORDS_PER_PAGE, False).items
+    questions = Question.query.paginate(page, RECORDS_PER_PAGE, False)
     return render_template('index.html', questions=questions)
 
 

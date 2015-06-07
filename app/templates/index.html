@@ -3,24 +3,26 @@
 {% block content %}
 <div class= 'well'>
     <h3>List of questions:</h3><br>
-    {% for q in questions %}
+    {% for q in questions.items %}
     <ul class="list-group">
       <h5>
-        <a href="#" class="list-group-item"><span class="badge">12</span> {{ q.title }}</a> 
-        <span class="help-block" style="padding-left:16px;">helper</span>
+        {% set len = q.answers.items|length %}
+        <a href="#" class="list-group-item">{% if len %}<span class="badge">{{ len }}</span>{% endif %} {{ q.title }}</a> 
+        <span class="help-block" style="padding-left:16px;">Author: <a href="#">{{ q.author.login }}</a> | From: {{ q.date.strftime('%d-%m-%Y') }}</span>
       </h5>
     </ul>
     {% endfor %}
-    <div class='text-center'>
-        <ul class="pagination">
-          <li class="disabled"><a href="#">«</a></li>
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li><a href="#">»</a></li>
-        </ul>
-    </div>
+    <ul class="pager">
+    {% if questions.has_prev %}
+      <li class="previous"><a href="{{ url_for('index', page=questions.prev_num) }}">← Previous</a></li>
+    {% else %}
+      <li class="previous disabled"><a href="#">← Previous</a></li>
+    {% endif %}
+    {% if questions.has_next %}
+      <li class="next"><a href="{{ url_for('index', page=questions.next_num) }}">Next →</a></li>
+    {% else %}
+      <li class="next disabled"><a href="#">Next →</a></li>
+    {% endif %}
+    </ul>
 </div>
 {% endblock content %}
