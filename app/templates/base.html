@@ -34,7 +34,7 @@
                 <li {% if request.path == '/login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Login</a></li>
                 <li {% if request.path == '/register' %}class="active"{% endif %}><a href="{{ url_for('register') }}">Register</a></li>
               {% else %}
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout ({{ g.user }})</a></li>
               {% endif %}
               </ul>
             
