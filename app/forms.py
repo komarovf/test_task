@@ -54,3 +54,7 @@ class LoginForm(Form):
 class AskForm(Form):
     title = StringField('title', validators=[Required()])
     body = TextAreaField('body', validators=[Required()])
+
+
+class AnswerForm(Form):
+    body = TextAreaField('body', validators=[Required()])

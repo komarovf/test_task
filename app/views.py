@@ -4,8 +4,8 @@ from flask import render_template, redirect, url_for, flash, g, session, request
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db, lm
-from .forms import RegisterForm, LoginForm, AskForm
-from .models import User, Question
+from .forms import RegisterForm, LoginForm, AskForm, AnswerForm
+from .models import User, Question, Answer
 from config import RECORDS_PER_PAGE
 
 
@@ -27,7 +27,7 @@ def not_found_error(error):
 @app.route('/')
 @app.route('/<int:page>')
 def index(page=1):
-    questions = Question.query.paginate(page, RECORDS_PER_PAGE, False)
+    questions = Question.query.paginate(page, RECORDS_PER_PAGE, True)
     return render_template('index.html', questions=questions)
 
 
@@ -78,3 +78,27 @@ def ask():
         flash('Your question successfully added!')
         return redirect(url_for('index'))
     return render_template('ask_question.html', form=form, title='Ask your question')
+
+
+@app.route('/answers/<int:question_id>', methods=['GET', 'POST'])
+@app.route('/answers/<int:question_id>/<int:page>', methods=['GET', 'POST'])
+def answers(question_id=None, page=1):
+    if question_id is None:
+        abort(404)
+    question = Question.query.get_or_404(question_id)
+    answers = question.answers.paginate(page, RECORDS_PER_PAGE, True)
+
+    # Posting answers only for authenticated users
+    if g.user.is_authenticated():
+        form = AnswerForm()
+        if form.validate_on_submit():
+            answer = Answer(date=datetime.utcnow(), body=form.body.data, author=g.user, question=question)
+            db.session.add(answer)
+            db.session.commit()
+            flash('Got it!')
+            return redirect(url_for('answers', question_id=question_id, page=page))
+    else:
+        abort(404)
+    return render_template('answers.html', question=question, answers=answers, form=form)
+
+

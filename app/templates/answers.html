@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% from "form_macro.html" import render_field %}
+
+{% block content %}
+  <h3>Question:</h3>
+  <div class="list-group">
+    <div class="list-group-item list-group-item-info">
+      <h4>{{ question.title }}</h4>
+      <p class="list-group-item-text">{{ question.body }}</p>
+      <span class="help-block">
+        <small>Asked {{ question.date.strftime('%d.%m.%Y at %H:%M') }} by <a href="#">{{ question.author.login }}</a></small>
+      </span>
+    </div>
+  </div>
+  <h3>Answers:</h3>
+  {% if answers.items|length > 0 %}
+  <div class="list-group">
+    {% for a in answers.items %}
+    <div class="list-group-item">
+      <h5>{{ a.body }}</h5>
+      <span class="help-block">
+        <small>Answer {{ a.date.strftime('%d.%m.%Y at %H:%M') }} by <a href="#">{{ a.author.login }}</a></small>
+        <a href="#"><span class="label label-info pull-right">Like (25)</span></a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <small>No answers yet!</small>
+  {% endif %}
+  <ul class="pager">
+    {% if answers.has_prev %}
+      <li class="previous"><a href="{{ url_for('answers', question_id=question.id, page=answers.prev_num) }}">← Previous</a></li>
+    {% else %}
+      <li class="previous disabled"><a href="#">← Previous</a></li>
+    {% endif %}
+    {% if answers.has_next %}
+      <li class="next"><a href="{{ url_for('answers', question_id=question.id, page=answers.next_num) }}">Next →</a></li>
+    {% else %}
+      <li class="next disabled"><a href="#">Next →</a></li>
+    {% endif %}
+  </ul>
+  {% if form %}
+  <div class="well">
+    <form class="form-horizontal" action="" method="POST" name="answer">
+    <fieldset>
+      {{ form.hidden_tag() }}
+      {{ render_field(form.body, label='Your answer', rows=3) }}
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-primary">Submit answer</button>
+          <button type="reset" class="btn btn-default">Reset</button>
+        </div>
+      </div>
+    </fieldset>
+    </form>
+  </div>
+  {% endif %}
+{% endblock content %}

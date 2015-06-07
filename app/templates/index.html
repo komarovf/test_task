@@ -2,13 +2,18 @@
 
 {% block content %}
 <div class= 'well'>
-    <h3>List of questions:</h3><br>
+    <h3>Questions:</h3><br>
     {% for q in questions.items %}
     <ul class="list-group">
       <h5>
         {% set len = q.answers.items|length %}
-        <a href="#" class="list-group-item">{% if len %}<span class="badge">{{ len }}</span>{% endif %} {{ q.title }}</a> 
-        <span class="help-block" style="padding-left:16px;">Author: <a href="#">{{ q.author.login }}</a> | From: {{ q.date.strftime('%d-%m-%Y') }}</span>
+        <a href="{{ url_for('answers', question_id=q.id) }}" class="list-group-item">
+          {% if len %}<span class="badge">{{ len }}</span>{% endif %} 
+          {{ q.title }}
+        </a> 
+        <span class="help-block" style="padding-left:16px;">
+          <small>Asked {{ q.date.strftime('%d.%m.%Y at %H:%M') }} by <a href="#">{{ q.author.login }}</a></small>
+        </span>
       </h5>
     </ul>
     {% endfor %}
