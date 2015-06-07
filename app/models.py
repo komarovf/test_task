@@ -29,7 +29,7 @@ class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     login = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120))
-    _password = db.Column(db.String(64))
+    _password = db.Column(db.String(100))
     answers = db.relationship('Answer', backref='author', lazy='dynamic')
     questions = db.relationship('Question', backref='author', lazy='dynamic')
 
